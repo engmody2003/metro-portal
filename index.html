@@ -19,10 +19,10 @@ body{font-family:Arial,sans-serif;background:#F0F4F8;color:#1A3A5C;min-height:10
 .wrap{max-width:580px;margin:0 auto;padding:14px}
 
 /* BACK NAV */
-.topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.back-btn{background:#fff;border:1.5px solid #E2E8F0;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:#1A3A5C;cursor:pointer;font-family:Arial;display:flex;align-items:center;gap:5px;flex-shrink:0}
+.topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;direction:ltr}
+.back-btn{background:#fff;border:1.5px solid #E2E8F0;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;color:#1A3A5C;cursor:pointer;font-family:Arial;display:flex;align-items:center;gap:5px;flex-shrink:0;direction:rtl}
 .back-btn:active{background:#F1F5F9}
-.screen-title{font-size:15px;font-weight:900;color:#1A3A5C;flex:1}
+.screen-title{font-size:15px;font-weight:900;color:#1A3A5C;flex:1;text-align:right;direction:rtl}
 
 /* BREADCRUMB */
 .bc{font-size:11px;color:#94A3B8;margin-bottom:12px;line-height:1.8}
@@ -180,7 +180,7 @@ body{font-family:Arial,sans-serif;background:#F0F4F8;color:#1A3A5C;min-height:10
 </div>
 
 <!-- ADMIN TOGGLE -->
-<button class="admin-toggle" onclick="openAdminLogin()" title="لوحة الإدارة">⚙️</button>
+<button class="admin-toggle" onclick="if(typeof openAdminLogin==='function')openAdminLogin();" title="لوحة الإدارة">⚙️</button>
 
 <!-- ADMIN LOGIN -->
 <div class="admin-panel" id="admin-login-panel">
@@ -362,6 +362,42 @@ function closeAdmin() { document.getElementById('admin-panel').classList.remove(
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 const ADMIN_PASS = 'ECM-Admin@2026';
+// ── Admin Panel ───────────────────────────────────────────────────────────────
+function openAdminLogin() {
+  document.getElementById('admin-pass-input').value = '';
+  document.getElementById('admin-pass-err').style.display = 'none';
+  document.getElementById('admin-login-panel').classList.add('open');
+}
+function closeAdminLogin() {
+  document.getElementById('admin-login-panel').classList.remove('open');
+}
+function checkAdminPass() {
+  const val = document.getElementById('admin-pass-input').value;
+  if (val === ADMIN_PASS) {
+    closeAdminLogin();
+    openAdmin();
+  } else {
+    document.getElementById('admin-pass-err').style.display = 'block';
+    document.getElementById('admin-pass-input').value = '';
+  }
+}
+document.getElementById('admin-pass-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkAdminPass();
+});
+function openAdmin() {
+  const rows = [];
+  Object.entries(DATA).forEach(([cat, lines]) => {
+    Object.entries(lines).forEach(([line, d]) => {
+      Object.entries(d.codes||{}).forEach(([type, code]) => {
+        rows.push(`<tr><td>${cat}</td><td>${line}</td><td>${type}</td><td>${code}</td></tr>`);
+      });
+    });
+  });
+  document.getElementById('admin-tbody').innerHTML = rows.join('');
+  document.getElementById('admin-panel').classList.add('open');
+}
+function closeAdmin() { document.getElementById('admin-panel').classList.remove('open'); }
+
 renderCats();
 window.history.replaceState({screen:1}, '');
 </script>
