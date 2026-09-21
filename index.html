@@ -180,13 +180,25 @@ body{font-family:Arial,sans-serif;background:#F0F4F8;color:#1A3A5C;min-height:10
 </div>
 
 <!-- ADMIN TOGGLE -->
-<button class="admin-toggle" onclick="openAdmin()" title="لوحة الإدارة">⚙️</button>
+<button class="admin-toggle" onclick="openAdminLogin()" title="لوحة الإدارة">⚙️</button>
+
+<!-- ADMIN LOGIN -->
+<div class="admin-panel" id="admin-login-panel">
+  <div class="admin-sheet">
+    <h2>🔐 دخول لوحة الإدارة</h2>
+    <p>هذه اللوحة مخصصة لمسؤولي التدريب فقط.</p>
+    <input class="code-input" id="admin-pass-input" type="password" placeholder="كلمة المرور" style="margin-bottom:10px">
+    <div class="code-err" id="admin-pass-err">❌ كلمة المرور غير صحيحة</div>
+    <button class="submit-btn" onclick="checkAdminPass()">دخول</button>
+    <button class="close-admin" onclick="closeAdminLogin()" style="margin-top:8px">✕ إغلاق</button>
+  </div>
+</div>
 
 <!-- ADMIN PANEL -->
 <div class="admin-panel" id="admin-panel">
   <div class="admin-sheet">
     <h2>⚙️ لوحة إدارة الأكواد</h2>
-    <p>هذه الأكواد تُعطى للمتدربين في بداية كل دورة — يمكن تغييرها من الكود المصدري.</p>
+    <p>هذه الأكواد تُعطى للمتدربين في بداية كل دورة.</p>
     <table class="admin-table">
       <thead><tr><th>الفئة</th><th>الخط</th><th>النوع</th><th>الكود</th></tr></thead>
       <tbody id="admin-tbody"></tbody>
@@ -349,6 +361,7 @@ function openAdmin() {
 function closeAdmin() { document.getElementById('admin-panel').classList.remove('open'); }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
+const ADMIN_PASS = 'ECM-Admin@2026';
 renderCats();
 window.history.replaceState({screen:1}, '');
 </script>
